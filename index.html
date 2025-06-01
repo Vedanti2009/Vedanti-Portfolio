@@ -1,0 +1,446 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfolio of Vedanti Awaghade, a Data Engineer specializing in Python, SQL, and cloud technologies. Explore my projects, skills, and experience.">
+    <meta name="keywords" content="Vedanti Awaghade, Data Engineer, Portfolio, Python, SQL, Apache Airflow, Google Cloud, Tableau, Data Pipelines">
+    <meta name="author" content="Vedanti Awaghade">
+    <!-- Open Graph for social media -->
+    <meta property="og:title" content="Vedanti Awaghade - Data Engineer Portfolio">
+    <meta property="og:description" content="Explore the portfolio of Vedanti Awaghade, showcasing data engineering projects, skills, and professional experience.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://Vedanti2009.github.io/vedanti-portfolio">
+    <meta property="og:image" content="https://Vedanti2009.github.io/vedanti-portfolio/og-image.jpg">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Vedanti Awaghade - Data Engineer Portfolio">
+    <meta name="twitter:description" content="Explore my data engineering projects and skills.">
+    <meta name="twitter:image" content="https://Vedanti2009.github.io/vedanti-portfolio/og-image.jpg">
+    <title>Vedanti Awaghade - Data Engineer Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <!-- SheetJS for XLSX processing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+            background: #f9fafb;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+        }
+        .hero-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M1200 120L0 16.48V0H1200V120Z" fill="white"/></svg>') no-repeat bottom;
+            background-size: cover;
+            opacity: 0.9;
+        }
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -0.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50%;
+            height: 3px;
+            background-color: #3b82f6;
+        }
+        .card-hover:hover {
+            transform: translateY(-10px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+        .nav-bar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+        }
+        .nav-links a {
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #3b82f6;
+            transition: width 0.3s ease;
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        .share-btn {
+            background: #3b82f6;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            transition: background 0.3s ease;
+        }
+        .share-btn:hover {
+            background: #1e3a8a;
+        }
+        .qr-code img {
+            width: 100px;
+            height: 100px;
+        }
+        #copyLinkBtn i {
+            margin-right: 0.5rem;
+        }
+        #copyLinkBtn.copied::after {
+            content: 'Copied!';
+            position: absolute;
+            top: -2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e3a8a;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+        }
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 64px;
+                left: 0;
+                width: 100%;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(8px);
+                padding: 1rem;
+                space-y-4;
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            section {
+                padding-top: 3rem;
+                padding-bottom: 3rem;
+            }
+            .hero-bg::after {
+                height: 50px;
+            }
+            .qr-code img {
+                width: 80px;
+                height: 80px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <!-- Navigation -->
+    <nav class="nav-bar shadow-lg sticky top-0 z-50" aria-label="Main navigation">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-3xl font-bold text-indigo-900">Vedanti Vikas Awaghade</h1>
+            <button id="mobileMenuToggle" class="md:hidden" aria-label="Toggle mobile menu">
+                <i class="fas fa-bars text-2xl text-indigo-900"></i>
+            </button>
+            <ul class="nav-links flex space-x-8 text-lg md:flex hidden">
+                <li><a href="#home" class="text-indigo-900 hover:text-indigo-600 transition-colors" aria-label="Home section">Home</a></li>
+                <li><a href="#about" class="text-indigo-900 hover:text-indigo-600 transition-colors" aria-label="About section">About</a></li>
+                <li><a href="#skills" class="text-indigo-900 hover:text-indigo-600 transition-colors" aria-label="Skills section">Skills</a></li>
+                <li><a href="#experience" class="text-indigo-900 hover:text-indigo-600 transition-colors" aria-label="Experience section">Experience</a></li>
+                <li><a href="#projects" class="text-indigo-900 hover:text-indigo-600 transition-colors" aria-label="Projects section">Projects</a></li>
+                <li><a href="#contact" class="text-indigo-900 hover:text-indigo-600 transition-colors" aria-label="Contact section">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-bg text-white py-32">
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <h2 class="text-5xl font-bold mb-4">Hey, I'm Vedanti!</h2>
+            <p class="text-2xl mb-6 max-w-3xl mx-auto">
+                A passionate Data Engineer turning raw data into actionable insights with Python, SQL, and a sprinkle of creativity.
+            </p>
+            <div class="flex justify-center gap-4">
+                <a href="#projects" class="inline-block bg-white text-indigo-900 py-3 px-6 rounded-full text-lg font-semibold hover:bg-indigo-100 transition-colors">Explore My Work</a>
+                <a href="https://your-resume-link.pdf" download class="inline-block bg-indigo-600 text-white py-3 px-6 rounded-full text-lg font-semibold hover:bg-indigo-700 transition-colors">Download Resume</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center section-title">About Me</h2>
+            <div class="flex flex-col md:flex-row items-center gap-12 mt-12">
+                <div class="md:w-1/2">
+                    <p class="text-lg text-gray-600 leading-relaxed">
+                        I'm a Data Engineer with over 2 years of experience crafting data pipelines, automating ETL processes, and building insightful dashboards. I thrive on transforming complex datasets into clear, reliable solutions using tools like Python, SQL, Apache Airflow, and GCP. My journey spans diverse industries, from IT administration to advanced analytics, and I'm always excited to tackle new challenges with a collaborative spirit and a knack for problem-solving.
+                    </p>
+                    <a href="#contact" class="mt-6 inline-block bg-indigo-600 text-white py-2 px-4 rounded-full hover:bg-indigo-700">Get in Touch</a>
+                </div>
+                <div class="md:w-1/2 grid grid-cols-2 gap-4">
+                    <div class="bg-indigo-50 p-4 rounded-lg text-center">
+                        <h3 class="text-xl font-semibold text-indigo-900">2+</h3>
+                        <p>Years of Experience</p>
+                    </div>
+                    <div class="bg-indigo-50 p-4 rounded-lg text-center">
+                        <h3 class="text-xl font-semibold text-indigo-900">10+</h3>
+                        <p>Tools Mastered</p>
+                    </div>
+                    <div class="bg-indigo-50 p-4 rounded-lg text-center">
+                        <h3 class="text-xl font-semibold text-indigo-900">5+</h3>
+                        <p>Projects Delivered</p>
+                    </div>
+                    <div class="bg-indigo-50 p-4 rounded-lg text-center">
+                        <h3 class="text-xl font-semibold text-indigo-900">3</h3>
+                        <p>Certifications</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-20 bg-gray-100">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center section-title">My Toolkit</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+                <div class="bg-white p-6 rounded-lg shadow-lg card-hover">
+                    <h3 class="text-2xl font-semibold text-indigo-900 mb-4">Programming & Analytics</h3>
+                    <p class="text-gray-600">Python, SQL, SAS, C++, JavaScript, Linux, DSA</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg card-hover">
+                    <h3 class="text-2xl font-semibold text-indigo-900 mb-4">Business Intelligence</h3>
+                    <p class="text-gray-600">Power BI, Tableau, Zoho Analytics, Excel, Microsoft Access</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg card-hover">
+                    <h3 class="text-2xl font-semibold text-indigo-900 mb-4">ETL & Cloud</h3>
+                    <p class="text-gray-600">Apache Airflow, Talend, GCP (BigQuery, Dataflow), MySQL, PostgreSQL</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center section-title">My Journey</h2>
+            <div class="space-y-12 mt-12">
+                <div class="bg-gray-50 p-8 rounded-lg shadow-lg card-hover">
+                    <h3 class="text-2xl font-semibold text-indigo-900">IT Administrator</h3>
+                    <p class="text-gray-500">Valley Integration Inc, Mississauga, ON | Mar 2024 – Feb 2025</p>
+                    <ul class="list-disc ml-6 mt-4 text-gray-600">
+                        <li>Revamped workflows with SharePoint and Zoho, automating payroll with Python scripts.</li>
+                        <li>Designed a BOM tracking system in Microsoft Access, streamlining sales proposals.</li>
+                        <li>Leveraged SQL, Tableau, and Zoho Analytics to deliver actionable project insights.</li>
+                    </ul>
+                </div>
+                <div class="bg-gray-50 p-8 rounded-lg shadow-lg card-hover">
+                    <h3 class="text-2xl font-semibold text-indigo-900">Advanced Application Engineering Associate</h3>
+                    <p class="text-gray-500">Accenture Solutions Pvt. Ltd., Bengaluru, KA | Jul 2022 – Dec 2023</p>
+                    <ul class="list-disc ml-6 mt-4 text-gray-600">
+                        <li>Built robust ETL pipelines with Talend and Aecorsoft for diverse data sources.</li>
+                        <li>Orchestrated workflows with Airflow and Automic, meeting tight SLAs.</li>
+                        <li>Crafted stored procedures to track KPIs and optimize data processes.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 bg-gray-100">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center section-title">Projects That Spark Joy</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+                <div class="bg-white p-8 rounded-lg shadow-lg card-hover">
+                    <h3 class="text-2xl font-semibold text-indigo-900">Predictive Cost Modeling</h3>
+                    <p class="text-gray-500">George Brown College, Toronto, ON | Jan 2025 – Apr 2025</p>
+                    <p class="mt-4 text-gray-600">Developed an XGBoost model and HTML dashboard to visualize pricing trends, empowering small businesses to win government contracts.</p>
+                    <p class="mt-2 text-gray-500"><small>Tech Stack: XGBoost, Python, HTML, Flask</small></p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-lg card-hover">
+                    <h3 class="text-2xl font-semibold text-indigo-900">Public Sector Employment Analysis</h3>
+                    <p class="text-gray-500">George Brown College, Toronto, ON | Dec 2024 – Feb 2025</p>
+                    <p class="mt-4 text-gray-600">Analyzed COVID-19’s impact on Ontario’s public sector with SAS, creating compelling visualizations using PROC SGPLOT.</p>
+                    <p class="mt-2 text-gray-500"><small>Tech Stack: SAS, PROC SGPLOT</small></p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-lg card-hover">
+                    <h3 class="text-2xl font-semibold text-indigo-900">Cloud-Based Analytic Workflow</h3>
+                    <p class="text-gray-500">Conestoga College, Kitchener, ON | Jan 2024 – Feb 2024</p>
+                    <p class="mt-4 text-gray-600">Built a scalable cloud workflow with Google Cloud Storage, BigQuery, and Apache Airflow, visualized in Tableau for enhanced analytics.</p>
+                    <p class="mt-2 text-gray-500"><small>Tech Stack: GCP, BigQuery, Airflow, Tableau</small></p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-lg card-hover">
+                    <h3 class="text-2xl font-semibold text-indigo-900">Ambiguity Resolution in Sentence Boundary Detection</h3>
+                    <p class="text-gray-500">Yeshwantrao Chavan Engineering College, Nagpur, India | Jun 2021 – Apr 2022</p>
+                    <p class="mt-4 text-gray-600">Achieved 87.81% accuracy in sentence boundary detection using a Bi-LSTM model, improving NLP accuracy for social media text analysis.</p>
+                    <p class="mt-2 text-gray-500"><small>Tech Stack: Bi-LSTM, Python, NLP</small></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-indigo-900 text-white">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold section-title">Let's Connect</h2>
+            <p class="text-lg mt-6 max-w-xl mx-auto">
+                I'm always up for a chat about data, tech, or new opportunities. Drop me a line!
+            </p>
+            <div class="mt-8">
+                <p class="text-lg">Mississauga, ON | +1 (437) 766-7132</p>
+                <p class="text-lg"><a href="mailto:vedanti.awaghade@gmail.com" class="underline hover:text-indigo-200">vedanti.awaghade@gmail.com</a></p>
+                <a href="https://www.linkedin.com/in/vedanti-awaghade" target="_blank" rel="noopener noreferrer" class="text-indigo-200 hover:text-white text-lg underline mt-2 inline-block">LinkedIn</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                <p class="text-sm">Created by Vedanti Awaghade © 2025</p>
+                <div class="flex flex-col items-center space-y-4">
+                    <div class="flex space-x-4">
+                        <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://vedanti2009.github.io/Vedanti-Portfolio/" target="_blank" rel="noopener noreferrer" class="share-btn" aria-label="Share on LinkedIn">
+                            <i class="fab fa-linkedin"></i> Share
+                        </a>
+                        <a href="https://twitter.com/intent/tweet?text=Check%20out%20my%20data%20engineering%20portfolio!&url=https://vedanti2009.github.io/Vedanti-Portfolio/" target="_blank" rel="noopener noreferrer" class="share-btn" aria-label="Share on Twitter">
+                            <i class="fab fa-twitter"></i> Tweet
+                        </a>
+                        <a href="mailto:?subject=Check%20out%20my%20Portfolio&body=Hi,%20I%20wanted%20to%20share%20my%20data%20engineering%20portfolio%20with%20you:%20https://vedanti2009.github.io/Vedanti-Portfolio/" class="share-btn" aria-label="Share via Email">
+                            <i class="fas fa-envelope"></i> Email
+                        </a>
+                    </div>
+               
+                    <button id="copyLinkBtn" class="share-btn relative" aria-label="Copy portfolio link">
+                        <i class="fas fa-link"></i> Copy Link
+                    </button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const navLinks = document.querySelector('.nav-links');
+        mobileMenuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Copy link button
+        const copyLinkBtn = document.getElementById('copyLinkBtn');
+        copyLinkBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText('https://vedanti2009.github.io/Vedanti-Portfolio/').then(() => {
+                copyLinkBtn.classList.add('copied');
+                setTimeout(() => copyLinkBtn.classList.remove('copied'), 2000);
+            });
+        });
+    </script>
+</body>
+</html>
